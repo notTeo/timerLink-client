@@ -1,0 +1,70 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+  @media (min-width: 500px){
+    *{
+      font-size: 20px;
+    }
+  }
+  .project{
+    width: 100%;
+  }
+  
+  .App {
+    width: 100%;
+  }
+  
+  
+  .blueButton {
+    font-weight: bold;
+    display: inline-block;
+    max-width: 100%;
+    min-width: 100px;
+    padding: 0.6rem 1.2rem;
+    background-color: rgb(2, 122, 250);
+    color: #fff;
+    border: 1px rgb(2, 122, 250) solid;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  
+  .blueButton:hover{
+    background-color: rgb(53, 151, 255);
+  }
+  
+  .whiteButton {
+    font-weight: bold;
+    max-width: 100%;
+    min-width: 100px;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    color: #000;
+    border: 1px #000 solid;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  
+  .whiteButton:hover{
+    background-color: #eee;
+  }
+  
+  .small-title {
+    color: rgb(2, 122, 250);
+    margin-bottom: 3rem;
+    display: flex;
+  }
+  
+  .micro-link{
+    color: rgb(2, 122, 250);
+  }
+  

@@ -1,0 +1,26 @@
+.errorPage{
+    max-width: 80%;
+    margin: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    border-radius: 4px;
+}
+
+
+.errorMessege > * {
+    margin: 1.5rem 0;
+}
+
+.errorMessege > h1{
+    font-size: 96px;
+    text-align: center;
+    color: rgb(2, 122, 250);
+    margin-top: 0;
+}
+
+.errorMessege > p > a{
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,36 @@
+.targetEntry {
+  width: 100%;
+  border: 1px #000 solid;
+  border-radius: 4px;
+  background: #eee;
+}
+
+.urlInputContainer > input {
+  width: 100%;
+  padding: 0.7rem;
+  background: #eee;
+  border: none;
+  border-bottom:1px #000 solid ;
+}
+
+.otherInputsContainer {
+  background: #eee;
+  padding-left: 0.3rem;
+}
+
+.startsOnContainer,
+.expiresOnContainer {
+  display: flex;
+  width: 180px;
+  flex-direction: column;
+  margin: 0.4rem 0;
+}
+
+.startsOnContainer > *,
+.expiresOnContainer > * {
+  margin: 0.4rem;
+}
+
+.checkbox{
+  margin-left: 0.5rem;
+}

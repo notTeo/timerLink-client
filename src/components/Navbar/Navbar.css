@@ -1,0 +1,52 @@
+.displayLines{
+    display: none;
+}
+
+.lines{
+    cursor: pointer;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    align-items: flex-end;
+    margin-top: 0.3rem;
+}
+
+.nav-line{
+    width: 30px;
+    border-bottom: 5px rgb(2, 122, 250) solid;
+    margin: 3px;
+}
+.middle{
+    width: 20px;
+}
+
+.displayFullScreenContent{
+    display: block;
+}   
+
+.fullScreenContent{
+    display: flex;
+    flex-direction: row;
+}
+
+.usernameDisplay{
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+
+}
+
+.usernameDisplay > h3{
+    color: rgb(2, 122, 250);
+    font-size: 20px;
+}
+
+@media (max-width:700px ){
+    .displayLines{
+        display: block;
+    }
+    .displayFullScreenContent{
+        display: none;
+    }
+}

@@ -1,0 +1,59 @@
+.linkList {
+  width: 90%;
+  margin:auto;
+  text-align: left;
+  display: flex;
+  justify-content: center;
+}
+
+.listContainer{
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.link{
+  margin: 0 auto 2rem auto;  
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 4px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.allTargetsContainer{
+  width: 100%;
+  display: flex;
+    flex-wrap: wrap;
+}
+.allTargetsContainer > *{
+  flex: 1 1 100%; 
+}
+
+.targetContainer{
+  width: 100%;
+ margin: auto;
+}
+.details{
+  width: 80%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.details > *{
+  width: 200px;
+  margin: 0.2rem;
+}
+
+.buttonsContainer{
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  margin-bottom: 1rem;
+  padding: 1rem 0;
+  border-bottom: 3px #000 solid ;
+}
+.buttonsContainer > button{
+  margin:0 0.5rem;
+}
