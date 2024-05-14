@@ -9,14 +9,13 @@ interface ILink {
   targets: any[];
 }
 
-
 function LinkList() {
   const token = useSelector(selectToken);
-  const [activeClicks, setActiveClicks] = useState(0)
+  const [activeClicks, setActiveClicks] = useState(0);
   const [userLinks, setUserLinks] = useState<ILink[]>([]);
 
-  function clickCounter(){
-    setActiveClicks(activeClicks + 1)
+  function clickCounter() {
+    setActiveClicks(activeClicks + 1);
   }
 
   useEffect(() => {
@@ -65,91 +64,30 @@ function LinkList() {
                       {target.url}
                     </a>
                   </p>
-                  <p>Starts on: {target.startDate ? target.startDate : "Active from creation"}</p>
-                  <p>Epxires on: {target.expireDate ? target.expireDate: "No expiration"}</p>
+                  <p>
+                    Starts on:{" "}
+                    {target.startDate
+                      ? target.startDate
+                      : "Active from creation"}
+                  </p>
+                  <p>
+                    Epxires on:{" "}
+                    {target.expireDate ? target.expireDate : "No expiration"}
+                  </p>
                   <p>Active Clicks: {target.activeClicks}</p>
                   <p>Inactive Clicks: {target.inactiveClicks}</p>
-                  <p>Total Clicks: {target.inactiveClicks + target.activeClicks}</p>
+                  <p>
+                    Total Clicks: {target.inactiveClicks + target.activeClicks}
+                  </p>
                   <div className="buttonsContainer">
-                <button className="blueButton editButton">Edit</button>
-                <button className="whiteButton">Delete</button>
-              </div>
+                    <button className="blueButton editButton">Edit</button>
+                    <button className="whiteButton">Delete</button>
+                  </div>
                 </li>
               ))}
             </ul>
           </li>
         ))}
-
-        {/* <li className="link">
-          <h3>Link's Name</h3>
-          <p>Total Clicks: 6</p>
-          <p>Targets</p>
-          <div className="allTargetsContainer">
-            <div className="targetContainer">
-              <p className="targetsUrl micro-link">www.safjklhaf.com</p>
-              <h3>Details</h3>
-              <div className="details">
-                <p>Starts on dd/mm/yy</p>
-                <p>Expiers on dd/mm/yy</p>
-                <p>Total Clicks while active: 2</p>
-                <p>Total Clicks while inactive: 4</p>
-              </div>
-              <div className="buttonsContainer">
-                <button className="blueButton editButton">Edit</button>
-                <button className="whiteButton">Delete</button>
-              </div>
-            </div>
-            <div className="targetContainer">
-              <p className="targetsUrl micro-link">www.safjklhaf.com</p>
-              <h3>Details</h3>
-              <div className="details">
-                <p>Starts on dd/mm/yy</p>
-                <p>Expiers on dd/mm/yy</p>
-                <p>Total Clicks while active: 2</p>
-                <p>Total Clicks while inactive: 4</p>
-              </div>
-              <div className="buttonsContainer">
-                <button className="blueButton editButton">Edit</button>
-                <button className="whiteButton">Delete</button>
-              </div>
-            </div>
-            <div className="targetContainer">
-              <p className="targetsUrl micro-link">www.safjklhaf.com</p>
-              <h3>Details</h3>
-              <div className="details">
-                <p>Starts on dd/mm/yy</p>
-                <p>Expiers on dd/mm/yy</p>
-                <p>Total Clicks while active: 2</p>
-                <p>Total Clicks while inactive: 4</p>
-              </div>
-              <div className="buttonsContainer">
-                <button className="blueButton editButton">Edit</button>
-                <button className="whiteButton">Delete</button>
-              </div>
-            </div>
-          </div>
-        </li> 
-        <li className="link">
-          <h3>Link's Name</h3>
-          <p>Total Clicks: 6</p>
-          <p>Targets</p>
-          <div className="allTargetsContainer">
-            <div className="targetContainer">
-              <p className="targetsUrl micro-link">www.safjklhaf.com</p>
-              <h3>Details</h3>
-              <div className="details">
-                <p>Starts on dd/mm/yy</p>
-                <p>Expiers on dd/mm/yy</p>
-                <p>Total Clicks while active: 2</p>
-                <p>Total Clicks while inactive: 4</p>
-              </div>
-              <div className="buttonsContainer">
-                <button className="blueButton editButton">Edit</button>
-                <button className="whiteButton">Delete</button>
-              </div>
-            </div>
-          </div>
-        </li>*/}
       </ul>
     </div>
   );
