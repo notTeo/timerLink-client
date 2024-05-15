@@ -36,6 +36,7 @@
   
   .blueButton:hover{
     background-color: rgb(53, 151, 255);
+    border: 1px rgb(53, 151, 250) solid;
   }
   
   .whiteButton {
@@ -58,6 +59,27 @@
     background-color: #eee;
   }
   
+  .redButton {
+    font-weight: bold;
+    max-width: 100%;
+    min-width: 100px;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #FF0000;
+    color: #fff;
+    border: 1px #FF0000 solid;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  
+  .redButton:hover{
+    background-color: #fa4242;
+    border: 1px #fa4242 solid;
+  }
+
   .small-title {
     color: rgb(2, 122, 250);
     margin-bottom: 3rem;

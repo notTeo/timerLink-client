@@ -2,6 +2,7 @@ import React from "react";
 import "./LinkForm.css";
 import { useSelector } from "react-redux";
 import { selectToken } from "../../reducers/authSlice";
+import { useNavigate } from "react-router-dom";
 
 type DivContent = {
   url: string;
@@ -24,6 +25,7 @@ const LinkForm: React.FC<LinkFormProps> = ({
 }: LinkFormProps) => {
   const [inputValue, setInputValue] = React.useState("");
   const token = useSelector(selectToken);
+  const navigate = useNavigate();
 
   const openForm = () => {
     if (visibleForm === true) {
@@ -53,7 +55,6 @@ const LinkForm: React.FC<LinkFormProps> = ({
         return response.json();
       })
       .then((data) => {
-        console.log("New link created:", data.data._id);
         return data.data._id;
       })
       .then((id) => {
@@ -67,6 +68,7 @@ const LinkForm: React.FC<LinkFormProps> = ({
             body: JSON.stringify(link),
           });
         }
+        navigate("/")
       })
       .catch((error) => {
         console.error("Error:", error);

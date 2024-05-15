@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./LinkList.css";
 import { useSelector } from "react-redux";
 import { selectToken } from "../../reducers/authSlice";
+import getUserLinks from "../../api/getUserLinks"
 
 interface ILink {
   _id: string;
@@ -19,29 +20,54 @@ function LinkList() {
   }
 
   useEffect(() => {
-    const fetchUserLinks = async () => {
-      try {
-        const response = await fetch("http://localhost:4000/links", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch user links");
-        }
-        const data = await response.json();
-        console.log(data.data);
-        setUserLinks(data.data || []);
-      } catch (error) {
-        console.error("Error fetching user links:", error);
-      }
-    };
-
     if (token) {
-      fetchUserLinks();
+      getUserLinks(token).then((data:any) => {
+        setUserLinks(data);
+      });
     }
   }, [token]);
+
+  function linkDelete(linkId: string) {
+    fetch(`http://localhost:4000/links/${linkId}/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((deleteResponse) => {
+        if (!deleteResponse.ok) {
+          throw new Error("Failed to delete target");
+        }
+        return getUserLinks(token).then((data: any) => {
+          setUserLinks(data);
+        });
+      })
+      .catch((error) => {
+        console.error("Error deleting link:", error);
+      });
+  }
+
+  function deleteTarget(linkId: any, targetId: any) {
+    fetch(`http://localhost:4000/links/${linkId}/${targetId}/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((deleteResponse) => {
+        if (!deleteResponse.ok) {
+          throw new Error("Failed to delete target");
+        }
+        return getUserLinks(token).then((data: any) => {
+          setUserLinks(data);
+        });
+      })
+      .catch((error) => {
+        console.error("Error deleting target:", error);
+      });
+  }
 
   return (
     <div className="linkList">
@@ -67,12 +93,14 @@ function LinkList() {
                   <p>
                     Starts on:{" "}
                     {target.startDate
-                      ? target.startDate
+                      ? target.startDate.split("T")[0]
                       : "Active from creation"}
                   </p>
                   <p>
-                    Epxires on:{" "}
-                    {target.expireDate ? target.expireDate : "No expiration"}
+                    Expires on:{" "}
+                    {target.expireDate
+                      ? target.expireDate.split("T")[0]
+                      : "No expiration"}
                   </p>
                   <p>Active Clicks: {target.activeClicks}</p>
                   <p>Inactive Clicks: {target.inactiveClicks}</p>
@@ -81,11 +109,12 @@ function LinkList() {
                   </p>
                   <div className="buttonsContainer">
                     <button className="blueButton editButton">Edit</button>
-                    <button className="whiteButton">Delete</button>
+                    <button className="redButton" onClick={() => deleteTarget(link._id, target._id)}>Delete</button>
                   </div>
                 </li>
               ))}
             </ul>
+            <button className="redButton" onClick={() => linkDelete(link._id)}>Delete</button>
           </li>
         ))}
       </ul>
