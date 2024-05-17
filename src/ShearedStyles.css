@@ -23,7 +23,7 @@
     display: inline-block;
     max-width: 100%;
     min-width: 100px;
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1rem;
     background-color: rgb(2, 122, 250);
     color: #fff;
     border: 1px rgb(2, 122, 250) solid;
@@ -78,6 +78,27 @@
   .redButton:hover{
     background-color: #fa4242;
     border: 1px #fa4242 solid;
+  }
+
+  .greenButton {
+    font-weight: bold;
+    max-width: 100%;
+    min-width: 100px;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #00D100;
+    color: #fff;
+    border: 1px #00D100 solid;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  
+  .greenButton:hover{
+    background-color: #00da00;
+    border: 1px #00da00 solid;
   }
 
   .small-title {

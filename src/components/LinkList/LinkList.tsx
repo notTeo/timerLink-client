@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./LinkList.css";
 import { useSelector } from "react-redux";
 import { selectToken } from "../../reducers/authSlice";
-import getUserLinks from "../../api/getUserLinks"
+import getUserLinks from "../../api/getUserLinks";
 
 interface ILink {
   _id: string;
@@ -12,22 +12,21 @@ interface ILink {
 
 function LinkList() {
   const token = useSelector(selectToken);
-  const [activeClicks, setActiveClicks] = useState(0);
   const [userLinks, setUserLinks] = useState<ILink[]>([]);
-
-  function clickCounter() {
-    setActiveClicks(activeClicks + 1);
-  }
+  const [urlTargetBody, setUrlTargetBody] = useState("");
+  const [expireDateTargetBody, setExpireDateTargetBody] = useState("");
+  const [startDateTargetBody, setStartDateTargetBody] = useState("");
+  const [editedTargetId, setEditedTargetId] = useState<string | null>(null);
 
   useEffect(() => {
     if (token) {
-      getUserLinks(token).then((data:any) => {
+      getUserLinks(token).then((data: any) => {
         setUserLinks(data);
       });
     }
   }, [token]);
 
-  function linkDelete(linkId: string) {
+  async function linkDelete(linkId: string) {
     fetch(`http://localhost:4000/links/${linkId}/delete`, {
       method: "DELETE",
       headers: {
@@ -48,7 +47,7 @@ function LinkList() {
       });
   }
 
-  function deleteTarget(linkId: any, targetId: any) {
+  async function deleteTarget(linkId: any, targetId: any) {
     fetch(`http://localhost:4000/links/${linkId}/${targetId}/delete`, {
       method: "DELETE",
       headers: {
@@ -69,6 +68,64 @@ function LinkList() {
       });
   }
 
+  async function editTarget(linkId: any, targetId: any): Promise<any> {
+    try {
+      const editResponse = await fetch(
+        `http://localhost:4000/links/${linkId}/${targetId}/edit`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            url: urlTargetBody,
+            expireDate: expireDateTargetBody,
+            startDate: startDateTargetBody,
+          }),
+        }
+      );
+
+      if (!editResponse.ok) {
+        throw new Error("Failed to edit target");
+      }
+
+      const data = await getUserLinks(token);
+      setUserLinks(data);
+    } catch (error) {
+      console.error("Error editing target:", error);
+    }
+    setEditedTargetId(null);
+  }
+
+  function openEditInputsTarget(
+    url: string,
+    startDate: string,
+    expireDate: string,
+    targetId: string
+  ) {
+    setUrlTargetBody(url);
+    setExpireDateTargetBody(expireDate);
+    setStartDateTargetBody(startDate);
+    setEditedTargetId(targetId);
+  }
+
+  function cancelEditTarget() {
+    setEditedTargetId(null);
+  }
+
+  function handleChange(event: any) {
+    const { name, value } = event.target;
+    if (name === "url") {
+      setUrlTargetBody(value);
+    } else if (name === "startDate") {
+      setStartDateTargetBody(value);
+    } else if (name === "expireDate") {
+      setExpireDateTargetBody(value);
+    }
+  }
+  
+
   return (
     <div className="linkList">
       <ul className="listContainer">
@@ -77,44 +134,122 @@ function LinkList() {
             <h2>{link.name}</h2>
             <h3>Targets:</h3>
             <ul>
-              {link.targets.map((target, index) => (
-                <li key={index}>
-                  <p>
-                    URL:{" "}
-                    <a
-                      href={`http://${target.url}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={clickCounter}
-                    >
-                      {target.url}
-                    </a>
-                  </p>
-                  <p>
-                    Starts on:{" "}
-                    {target.startDate
-                      ? target.startDate.split("T")[0]
-                      : "Active from creation"}
-                  </p>
-                  <p>
-                    Expires on:{" "}
-                    {target.expireDate
-                      ? target.expireDate.split("T")[0]
-                      : "No expiration"}
-                  </p>
-                  <p>Active Clicks: {target.activeClicks}</p>
-                  <p>Inactive Clicks: {target.inactiveClicks}</p>
-                  <p>
-                    Total Clicks: {target.inactiveClicks + target.activeClicks}
-                  </p>
+              {link.targets.map((target) => (
+                <li key={target._id}>
+                  {editedTargetId === target._id ? (
+                    <>
+                      <p>
+                        URL:{" "}
+                        <input
+                          name="url"
+                          type="text"
+                          value={urlTargetBody}
+                          onChange={handleChange}
+                        />
+                      </p>
+                      <p>
+                        Starts on:{" "}
+                        <input
+                          name="startDate"
+                          type="date"
+                          value={startDateTargetBody ? (startDateTargetBody.split("T")[0]) : ( "" )}
+                          onChange={handleChange}
+                        />
+                      </p>
+                      <p>
+                        Expires on:{" "}
+                        <input
+                          name="expireDate"
+                          type="date"
+                          value={expireDateTargetBody ? (expireDateTargetBody.split("T")[0]) : ("")}
+                          onChange={handleChange}
+                        />
+                      </p>
+                      <p>Active Clicks: {target.activeClicks}</p>
+                      <p>Inactive Clicks: {target.inactiveClicks}</p>
+                      <p>
+                        Total Clicks:{" "}
+                        {target.inactiveClicks + target.activeClicks}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p>
+                        URL:{" "}
+                        <a
+                          href={`http://${target.url}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {target.url}
+                        </a>
+                      </p>
+                      <p>
+                        Starts on:{" "}
+                        {target.startDate
+                          ? target.startDate.split("T")[0]
+                          : "Active from creation"}
+                      </p>
+                      <p>
+                        Expires on:{" "}
+                        {target.expireDate
+                          ? target.expireDate.split("T")[0]
+                          : "No expiration"}
+                      </p>
+                      <p>Active Clicks: {target.activeClicks}</p>
+                      <p>Inactive Clicks: {target.inactiveClicks}</p>
+                      <p>
+                        Total Clicks:{" "}
+                        {target.inactiveClicks + target.activeClicks}
+                      </p>
+                    </>
+                  )}
                   <div className="buttonsContainer">
-                    <button className="blueButton editButton">Edit</button>
-                    <button className="redButton" onClick={() => deleteTarget(link._id, target._id)}>Delete</button>
+                    {editedTargetId === target._id ? (
+                      <>
+                        <button
+                          className="greenButton editButton"
+                          onClick={() => editTarget(link._id, target._id)}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className="whiteButton"
+                          onClick={cancelEditTarget}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="blueButton"
+                          onClick={() =>
+                            openEditInputsTarget(
+                              target.url,
+                              target.startDate,
+                              target.expireDate,
+                              target._id
+                            )
+                          }
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="redButton"
+                          onClick={() => deleteTarget(link._id, target._id)}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
                   </div>
                 </li>
               ))}
             </ul>
-            <button className="redButton" onClick={() => linkDelete(link._id)}>Delete</button>
+            <button className="redButton" onClick={() => linkDelete(link._id)}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>

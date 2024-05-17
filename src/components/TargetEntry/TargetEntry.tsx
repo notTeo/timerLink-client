@@ -49,6 +49,13 @@ const TargetEntry: React.FC<TargetEntryProps> = ({
   };
 
   const createDiv = () => {
+    if (
+      urlInput === "" ||
+      (isCheckedStartsOn && startDate === "") ||
+      (isCheckedExpiresOn && expireDate === "")
+    ) {
+      return alert("Please fill in all fields");
+    }
     const newDiv: DivContent = {
       url: urlInput,
       startDate: isCheckedStartsOn ? startDate : null,
