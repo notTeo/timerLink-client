@@ -2,12 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface AuthState {
   isAuthenticated: boolean;
-  token: string | null; // Add token field to the state
+  token: string | null; 
 }
 
 const initialState: AuthState = {
   isAuthenticated: localStorage.getItem("isAuthenticated") === "true",
-  token: localStorage.getItem("token"), // Initialize token from localStorage
+  token: localStorage.getItem("token"),
 };
 
 export const authSlice = createSlice({

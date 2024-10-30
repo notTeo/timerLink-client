@@ -63,6 +63,11 @@ const TargetEntry: React.FC<TargetEntryProps> = ({
     };
 
     setDivList((prevDivs) => [...prevDivs, newDiv]);
+    setUrlInput("");
+    setStartDate("");
+    setExpireDate("");
+    setIsCheckedExpiresOn(false);
+    setIsCheckedStartsOn(false);
     closeForm();
   };
 

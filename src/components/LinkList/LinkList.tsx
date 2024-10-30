@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./LinkList.css";
 import { useSelector } from "react-redux";
 import { selectToken } from "../../reducers/authSlice";
-import getUserLinks from "../../api/getUserLinks";
+import getUserLinksApi from "../../api/getUserLinkApi";
+import deleteLinkApi from "../../api/deleteLinkApi";
+import deleteTargetApi from "../../api/DeleteTargetApi";
+import editTargetApi from "../../api/EditTargetApi";
 
 interface ILink {
   _id: string;
@@ -20,77 +23,45 @@ function LinkList() {
 
   useEffect(() => {
     if (token) {
-      getUserLinks(token).then((data: any) => {
+      getUserLinksApi(token).then((data: any) => {
         setUserLinks(data);
       });
     }
   }, [token]);
 
   async function linkDelete(linkId: string) {
-    fetch(`http://localhost:4000/links/${linkId}/delete`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((deleteResponse) => {
-        if (!deleteResponse.ok) {
-          throw new Error("Failed to delete target");
-        }
-        return getUserLinks(token).then((data: any) => {
-          setUserLinks(data);
-        });
-      })
-      .catch((error) => {
-        console.error("Error deleting link:", error);
-      });
+    try {
+      await deleteLinkApi(token, linkId);
+      const data = await getUserLinksApi(token);
+      setUserLinks(data);
+    } catch (error) {
+      console.error("Error deleting link:", error);
+    }
   }
 
   async function deleteTarget(linkId: any, targetId: any) {
-    fetch(`http://localhost:4000/links/${linkId}/${targetId}/delete`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((deleteResponse) => {
-        if (!deleteResponse.ok) {
-          throw new Error("Failed to delete target");
-        }
-        return getUserLinks(token).then((data: any) => {
-          setUserLinks(data);
-        });
-      })
-      .catch((error) => {
-        console.error("Error deleting target:", error);
+    try {
+      await deleteTargetApi(token, linkId, targetId);
+      getUserLinksApi(token).then((data: any) => {
+        setUserLinks(data);
       });
+    } catch (error) {
+      console.error("Error deleting target:", error);
+    }
   }
 
   async function editTarget(linkId: any, targetId: any): Promise<any> {
     try {
-      const editResponse = await fetch(
-        `http://localhost:4000/links/${linkId}/${targetId}/edit`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            url: urlTargetBody,
-            expireDate: expireDateTargetBody,
-            startDate: startDateTargetBody,
-          }),
-        }
+      await editTargetApi(
+        token,
+        linkId,
+        targetId,
+        urlTargetBody,
+        expireDateTargetBody,
+        startDateTargetBody
       );
 
-      if (!editResponse.ok) {
-        throw new Error("Failed to edit target");
-      }
-
-      const data = await getUserLinks(token);
+      const data = await getUserLinksApi(token);
       setUserLinks(data);
     } catch (error) {
       console.error("Error editing target:", error);
@@ -124,7 +95,121 @@ function LinkList() {
       setExpireDateTargetBody(value);
     }
   }
-  
+
+  async function handleLinkClick(
+    linkId: string,
+    targetId: string,
+    startDate: string | null,
+    expireDate: string | null,
+    currentActiveClicks: number,
+    currentInactiveClicks: number
+  ) {
+    try {
+      const currentDate = new Date();
+
+      if (startDate && expireDate) {
+        const startDateObj = new Date(startDate);
+        const expireDateObj = new Date(expireDate);
+
+        if (currentDate >= startDateObj && currentDate <= expireDateObj) {
+          const response = await fetch(
+            `http://localhost:4000/links/${linkId}/${targetId}/edit`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                activeClicks: currentActiveClicks + 1,
+              }),
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Failed to update activeClicks");
+          }
+        } else {
+          const response = await fetch(
+            `http://localhost:4000/links/${linkId}/${targetId}/edit`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                inactiveClicks: currentInactiveClicks + 1,
+              }),
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Failed to update inactiveClicks");
+          }
+        }
+      } else if (startDate && !expireDate) {
+        const startDateObj = new Date(startDate);
+
+        if (currentDate >= startDateObj) {
+          const response = await fetch(
+            `http://localhost:4000/links/${linkId}/${targetId}/edit`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                activeClicks: currentActiveClicks + 1,
+              }),
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Failed to update activeClicks");
+          }
+        } else {
+          const response = await fetch(
+            `http://localhost:4000/links/${linkId}/${targetId}/edit`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                inactiveClicks: currentInactiveClicks + 1,
+              }),
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Failed to update inactiveClicks");
+          }
+        }
+      } else {
+        const response = await fetch(
+          `http://localhost:4000/links/${linkId}/${targetId}/edit`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              activeClicks: currentActiveClicks + 1,
+            }),
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to update activeClicks");
+        }
+      }
+
+      getUserLinksApi(token).then((data: any) => {
+        setUserLinks(data);
+      });
+    } catch (e) {
+      console.error("Error handling link click:", e);
+    }
+  }
 
   return (
     <div className="linkList">
@@ -152,7 +237,11 @@ function LinkList() {
                         <input
                           name="startDate"
                           type="date"
-                          value={startDateTargetBody ? (startDateTargetBody.split("T")[0]) : ( "" )}
+                          value={
+                            startDateTargetBody
+                              ? startDateTargetBody.split("T")[0]
+                              : ""
+                          }
                           onChange={handleChange}
                         />
                       </p>
@@ -161,7 +250,11 @@ function LinkList() {
                         <input
                           name="expireDate"
                           type="date"
-                          value={expireDateTargetBody ? (expireDateTargetBody.split("T")[0]) : ("")}
+                          value={
+                            expireDateTargetBody
+                              ? expireDateTargetBody.split("T")[0]
+                              : ""
+                          }
                           onChange={handleChange}
                         />
                       </p>
@@ -177,9 +270,26 @@ function LinkList() {
                       <p>
                         URL:{" "}
                         <a
-                          href={`http://${target.url}`}
+                          href={
+                            (target.startDate &&
+                              new Date(target.startDate) > new Date()) ||
+                            (target.expireDate &&
+                              new Date(target.expireDate) < new Date())
+                              ? `http://localhost:3000/${target.url}`
+                              : `http://${target.url}`
+                          }
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={() =>
+                            handleLinkClick(
+                              link._id,
+                              target._id,
+                              target.startDate,
+                              target.expireDate,
+                              target.activeClicks,
+                              target.inactiveClicks
+                            )
+                          }
                         >
                           {target.url}
                         </a>

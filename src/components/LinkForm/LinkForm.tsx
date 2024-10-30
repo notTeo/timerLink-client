@@ -41,7 +41,7 @@ const LinkForm: React.FC<LinkFormProps> = ({
 
   function saveButtonClick() {
     if (inputValue === "") {
-      alert("Please give your link a name");
+      alert("Please give your links a name");
     }
     fetch("http://localhost:4000/links/new-link", {
       method: "POST",

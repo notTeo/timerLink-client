@@ -5,9 +5,12 @@ import Sidebar from "../Sidebar/Sidebar";
 import { useDispatch } from "react-redux";
 import { login, logout } from "../../reducers/authSlice";
 import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 import { selectIsAuthenticated } from "../../reducers/authSlice";
 
+
 export default function Navbar() {
+  const username = useSelector((state: RootState) => state.user.username);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -43,8 +46,8 @@ export default function Navbar() {
           ) : (
             <>
               <div className="usernameDisplay">
-                <h2>Hi,</h2>
-                <h3>Username</h3>
+                  <h2>Hi,&nbsp;</h2>
+                  <h3>{username || "Guest"}</h3>  
               </div>
               <div className="logOutButton ">
                 <Link to={"/"} onClick={handleLogout} className="whiteButton">

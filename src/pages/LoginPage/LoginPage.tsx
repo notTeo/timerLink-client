@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import { useDispatch } from "react-redux";
 import { login } from "../../reducers/authSlice";
+import { setUsername } from "../../reducers/userSlice";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -32,8 +33,10 @@ export default function LoginPage() {
       const responseData = await response.json();
 
       const token = responseData.data.token;
+      const username = responseData.data.username;
+      dispatch(setUsername(username));
 
-      console.log(token);
+      console.log({token, username});
       dispatch(login(token));
       navigate("/")
     } catch (error) {

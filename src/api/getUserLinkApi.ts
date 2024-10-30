@@ -1,4 +1,4 @@
-export default async function getUserLinks(token: string | null) {
+export default async function getUserLinksApi(token: string | null) {
   try {
     const response = await fetch("http://localhost:4000/links", {
       method: "GET",
