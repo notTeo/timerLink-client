@@ -5,8 +5,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectIsAuthenticated } from "./reducers/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectExpirationTimestamp, selectIsAuthenticated } from "./reducers/authSlice";
 import CreateLinkPage from "./pages/CreateLinkPage/CreateLinkPage";
 import HeroPage from "./pages/HeroPage/HeroPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
@@ -22,6 +22,20 @@ const App = () => {
     console.log(isAuthenticated);
   }, [isAuthenticated]);
 
+  const dispatch = useDispatch();
+  const expirationTimestamp = useSelector(selectExpirationTimestamp);
+
+  useEffect(() => {
+    if (!expirationTimestamp) return;
+
+    const timeLeft = expirationTimestamp - Date.now();
+
+    const timeout = setTimeout(() => {
+      dispatch(logout());
+    }, timeLeft);
+
+    return () => clearTimeout(timeout);
+  }, [expirationTimestamp, dispatch]);
   return (
     <Router>
       <Routes>

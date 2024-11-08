@@ -3,6 +3,8 @@ import "./LinkForm.css";
 import { useSelector } from "react-redux";
 import { selectToken } from "../../reducers/authSlice";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../../reducers/authSlice";
+import { useDispatch } from "react-redux";
 
 type DivContent = {
   url: string;
@@ -26,6 +28,7 @@ const LinkForm: React.FC<LinkFormProps> = ({
   const [inputValue, setInputValue] = React.useState("");
   const token = useSelector(selectToken);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const openForm = () => {
     if (visibleForm === true) {
@@ -52,8 +55,11 @@ const LinkForm: React.FC<LinkFormProps> = ({
       body: JSON.stringify({ name: inputValue }),
     })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch user links");
+        if (response.status === 401) {
+          console.error("Unauthorized access - possible token expiration or invalid token.");
+          dispatch(logout());
+          navigate("/");
+          return [];
         }
         return response.json();
       })

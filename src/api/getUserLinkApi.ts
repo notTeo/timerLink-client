@@ -14,7 +14,7 @@ export default async function getUserLinksApi(
       return [];
     }
 
-    console.log("Token being sent:", token);
+    //console.log("Token being sent:", token);
 
     const response = await fetch("http://localhost:4000/links", {
       method: "GET",
@@ -25,8 +25,9 @@ export default async function getUserLinksApi(
 
     if (response.status === 401) {
       console.error("Unauthorized access - possible token expiration or invalid token.");
+      alert("Session expired, try logging in again!")
       dispatch(logout());
-      navigate("/");
+      navigate("/login");
       return [];
     }
 

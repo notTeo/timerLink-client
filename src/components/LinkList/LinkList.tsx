@@ -63,7 +63,7 @@ function LinkList() {
         targetId,
         urlTargetBody,
         expireDateTargetBody,
-        startDateTargetBody
+        startDateTargetBody,
       );
 
       const data = await getUserLinksApi(dispatch, token, navigate);

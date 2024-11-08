@@ -1,10 +1,12 @@
+
+
 export default async function EditTargetApi(
   token: string | null,
   linkId: string,
   targetId: string,
   urlTargetBody: string,
   expireDateTargetBody: string,
-  startDateTargetBody: string
+  startDateTargetBody: string,
 ) {
   fetch(`http://localhost:4000/links/${linkId}/${targetId}/edit`, {
     method: "PUT",
@@ -18,4 +20,5 @@ export default async function EditTargetApi(
       startDate: startDateTargetBody,
     }),
   });
+  
 }

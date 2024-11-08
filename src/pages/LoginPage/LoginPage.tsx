@@ -1,9 +1,15 @@
 import React, { useState } from "react";
+import {jwtDecode} from "jwt-decode";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import { useDispatch } from "react-redux";
 import { login } from "../../reducers/authSlice";
 import { setUsername } from "../../reducers/userSlice";
+
+interface TokenPayload {
+  _id: string;
+  exp: number;
+}
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -12,6 +18,7 @@ export default function LoginPage() {
     username: "",
     password: "",
   });
+  const [rememberMe, setRememberMe] = useState(false)
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -34,10 +41,12 @@ export default function LoginPage() {
 
       const token = responseData.data.token;
       const username = responseData.data.username;
+      const decodedToken = jwtDecode<TokenPayload>(token);
+      const expirationTimestamp = decodedToken.exp * 1000;
       dispatch(setUsername(username));
 
       console.log({token, username});
-      dispatch(login(token));
+      dispatch(login({ token, rememberMe, expirationTimestamp }));
       navigate("/")
     } catch (error) {
       console.error("Login error:", error);
@@ -71,6 +80,8 @@ export default function LoginPage() {
               type="checkbox"
               name="remeberMecheckbox"
               className="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
             />
             Remember me
           </label>
