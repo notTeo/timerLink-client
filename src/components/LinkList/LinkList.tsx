@@ -6,6 +6,8 @@ import getUserLinksApi from "../../api/getUserLinkApi";
 import deleteLinkApi from "../../api/deleteLinkApi";
 import deleteTargetApi from "../../api/DeleteTargetApi";
 import editTargetApi from "../../api/EditTargetApi";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 interface ILink {
   _id: string;
@@ -21,9 +23,12 @@ function LinkList() {
   const [startDateTargetBody, setStartDateTargetBody] = useState("");
   const [editedTargetId, setEditedTargetId] = useState<string | null>(null);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (token) {
-      getUserLinksApi(token).then((data: any) => {
+      getUserLinksApi(dispatch, token, navigate).then((data: any) => {
         setUserLinks(data);
       });
     }
@@ -32,7 +37,7 @@ function LinkList() {
   async function linkDelete(linkId: string) {
     try {
       await deleteLinkApi(token, linkId);
-      const data = await getUserLinksApi(token);
+      const data = await getUserLinksApi(dispatch, token, navigate);
       setUserLinks(data);
     } catch (error) {
       console.error("Error deleting link:", error);
@@ -42,7 +47,7 @@ function LinkList() {
   async function deleteTarget(linkId: any, targetId: any) {
     try {
       await deleteTargetApi(token, linkId, targetId);
-      getUserLinksApi(token).then((data: any) => {
+      getUserLinksApi(dispatch, token, navigate).then((data: any) => {
         setUserLinks(data);
       });
     } catch (error) {
@@ -61,7 +66,7 @@ function LinkList() {
         startDateTargetBody
       );
 
-      const data = await getUserLinksApi(token);
+      const data = await getUserLinksApi(dispatch, token, navigate);
       setUserLinks(data);
     } catch (error) {
       console.error("Error editing target:", error);
@@ -203,7 +208,7 @@ function LinkList() {
         }
       }
 
-      getUserLinksApi(token).then((data: any) => {
+      getUserLinksApi( dispatch,token, navigate).then((data: any) => {
         setUserLinks(data);
       });
     } catch (e) {
