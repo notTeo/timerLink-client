@@ -19,6 +19,7 @@ export default function LoginPage() {
     password: "",
   });
   const [rememberMe, setRememberMe] = useState(false)
+  const [error, setError] = useState("");
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -45,11 +46,13 @@ export default function LoginPage() {
       const expirationTimestamp = decodedToken.exp * 1000;
       dispatch(setUsername(username));
 
-      console.log({token, username});
+      console.log({ token, username });
+      setError("");
       dispatch(login({ token, rememberMe, expirationTimestamp }));
       navigate("/")
     } catch (error) {
       console.error("Login error:", error);
+      setError("Incorrect username or password. Please try again.");
     }
   };
   return (
@@ -73,6 +76,18 @@ export default function LoginPage() {
             value={formData.password}
             onChange={handleChange}
           />
+        </div>
+        <div>
+          {error && <p className="login-input-error">
+            {error}
+          </p>}
+        </div>
+        <div>
+          <p>
+            <Link to={"/forgot-password"} className="micro-link">
+              Forgot Password?
+            </Link>
+          </p>
         </div>
         <div className="loginControls">
           <label htmlFor="remeberMecheckbox">

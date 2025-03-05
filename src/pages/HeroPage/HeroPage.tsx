@@ -12,10 +12,10 @@ export default function HeroPage() {
         </p>
       </div>
       <div className="boxes">
-        <div className="box1"></div>
-        <div className="box2"></div>
-        <div className="box3"></div>
-        <div className="box4"></div>
+        <div className="box box1"></div>
+        <div className="box box2"></div>
+        <div className="box box3"></div>
+        <div className="box box4"></div>
       </div>
     </div>
   );

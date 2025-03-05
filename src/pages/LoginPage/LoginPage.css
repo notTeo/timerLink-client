@@ -8,6 +8,13 @@
   border-radius: 4px;
 }
 
+.login-input-error{
+  color: red;
+  font-size: 0.9rem;
+  padding: 5px 0px;
+  border-radius: 4px;
+}
+
 .marginWrapper {
   max-width: 400px;
   margin: auto;

@@ -50,3 +50,8 @@
         display: none;
     }
 }
+
+.buttonContainer{
+    display: flex;
+    justify-content: space-between;
+}

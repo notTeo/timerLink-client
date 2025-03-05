@@ -34,7 +34,7 @@ export default function Navbar() {
       <div className="displayFullScreenContent">
         <div className="fullScreenContent">
           {!isAuthenticated ? (
-            <>
+            <div>
               <Link to={"/login"} className="whiteButton">
                 Login
               </Link>
@@ -42,7 +42,7 @@ export default function Navbar() {
               <Link to={"/sign-in"} className="blueButton">
                 Sign In
               </Link>
-            </>
+            </div>
           ) : (
             <>
               <div className="usernameDisplay">
@@ -58,7 +58,7 @@ export default function Navbar() {
           )}
         </div>
       </div>
-      <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+      <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar}/>
     </div>
   );
 }

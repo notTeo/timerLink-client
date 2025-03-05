@@ -11,6 +11,7 @@ export default function SignInPage() {
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,9 +26,12 @@ export default function SignInPage() {
         },
         body: JSON.stringify(formData),
       });
-
+      setError("");
       if (!response.ok) {
-        throw new Error("Failed to register");
+        const errorData = await response.json();
+        const errorMessage = errorData.error || "Failed to register"; // Fallback if message is missing
+        setError(`${errorMessage}`);
+        throw new Error(errorMessage);
       }
       navigate("/");
     } catch (error) {
@@ -73,6 +77,11 @@ export default function SignInPage() {
               onChange={handleChange}
               required
             />
+          </div>
+          <div>
+            {error.split("\n").map((line, index) => (
+              <p key={index} className="login-input-error">{line}</p>
+            ))}
           </div>
           <div className="signInControls">
             <label htmlFor="remeberMecheckbox">

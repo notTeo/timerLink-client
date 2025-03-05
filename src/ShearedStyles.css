@@ -41,9 +41,11 @@
   
   .whiteButton {
     font-weight: bold;
+    text-align: center;
     max-width: 100%;
     min-width: 100px;
     display: inline-block;
+    margin: 0 0.5rem;
     padding: 0.5rem 1rem;
     background-color: #fff;
     color: #000;
